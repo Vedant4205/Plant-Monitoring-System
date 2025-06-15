@@ -1,0 +1,33 @@
+# Arduino
+*.hex
+*.elf
+*.bin
+build/
+*.o
+*.d
+*.eep
+*.lss
+*.map
+*.sym
+
+# Node.js
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Project specific
+config/credentials.json 

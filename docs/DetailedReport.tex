@@ -1,0 +1,485 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{geometry}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{caption}
+
+% Page geometry
+\geometry{
+    a4paper,
+    margin=2.5cm
+}
+
+% Title formatting
+\titleformat{\section}
+    {\normalfont\Large\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}
+    {\normalfont\large\bfseries}{\thesubsection}{1em}{}
+
+% Code listing settings
+\lstset{
+    basicstyle=\ttfamily\small,
+    breaklines=true,
+    frame=single,
+    numbers=left,
+    numberstyle=\tiny,
+    keywordstyle=\color{blue},
+    commentstyle=\color{green!60!black},
+    stringstyle=\color{red},
+    showstringspaces=false
+}
+
+% Hyperref settings
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=cyan,
+}
+
+\begin{document}
+
+\begin{titlepage}
+    \centering
+    \vspace*{2cm}
+    {\Huge\bfseries Plant Monitoring System\par}
+    \vspace{1cm}
+    {\Large Detailed Technical Report\par}
+    \vspace{2cm}
+    {\Large\itshape Patel Vedant Prakash\par}
+    {\Large\itshape Patwari Jevesh Devang\par}
+    \vspace{1cm}
+    {\large BTech Electrical Engineering, Class of 2027\par}
+    \vspace{2cm}
+    {\large Under the guidance of\par}
+    {\large Prof. Sudip Roy\par}
+    {\large Computer Science and Engineering\par}
+    \vspace{2cm}
+    {\large Indian Institute of Technology, Roorkee\par}
+    \vfill
+    {\large \today\par}
+\end{titlepage}
+
+\tableofcontents
+\newpage
+
+\section*{Abstract}
+The Plant Monitoring System (PMS) is an IoT-based solution for real-time monitoring of plant health parameters such as temperature, humidity, and soil moisture. It features a modular architecture with sensor nodes, a Node.js backend, and a web dashboard for visualization and alerts.The system uses the ESP8266 NodeMCU development board for wireless connectivity and data transmission. The system is scalable, cost-effective, and suitable for home, research, and agricultural use. Its modular and extensible design, real-time feedback, and cloud integration demonstrate the potential of IoT-based solutions in improving efficiency, sustainability, and decision-making in plant care. The platform lays the groundwork for advanced features such as predictive analytics, automated irrigation, and multi-platform support.
+
+\section{Detailed System Architecture}
+
+\subsection{System Overview}
+The Plant Monitoring System is a full-stack web application that integrates IoT sensors with a modern web interface. The system follows a client-server architecture with the following components:
+
+\subsubsection{Frontend Layer}
+\begin{itemize}[leftmargin=*]
+    \item Web-based dashboard built with TypeScript
+    \item Real-time data visualization using interactive charts
+    \item Responsive UI design for multiple device compatibility
+\end{itemize}
+
+\subsubsection{Backend Layer}
+\begin{itemize}[leftmargin=*]
+    \item Node.js server with TypeScript
+    \item RESTful API endpoints for data management
+    \item Google Sheets integration for data persistence
+\end{itemize}
+
+\subsubsection{IoT Layer}
+\begin{itemize}[leftmargin=*]
+    \item Sensor network for environmental monitoring
+    \item Real-time data collection and transmission
+    \item Support for multiple plant monitoring stations
+\end{itemize}
+
+\subsection{Data Flow}
+\begin{enumerate}[leftmargin=*]
+    \item Sensors collect environmental data (temperature, humidity, soil moisture)
+    \item Data is transmitted to the backend server
+    \item Server processes and stores data in Google Sheets
+    \item Frontend fetches and visualizes data in real-time
+    \item Alert system monitors thresholds and notifies users
+\end{enumerate}
+
+\section{Technical Specifications}
+
+\subsection{Hardware Requirements}
+\begin{tabular}{@{}llll@{}}
+\toprule
+\textbf{Sensor} & \textbf{Range} & \textbf{Accuracy} & \textbf{Interface} \\
+\midrule
+AHT-11 & -40–85°C, 0–100\% RH & $\pm$0.3°C, $\pm$2\% RH & I\textsuperscript{2}C \\
+DHT-11 & 0–50°C, 20–90\% RH & $\pm$2°C, $\pm$5\% RH & Single-wire \\
+Soil Moisture & 0–100\% VWC & $\pm$3\% & Analog \\
+\bottomrule
+\end{tabular}
+
+\vspace{0.5cm}
+\noindent
+\begin{minipage}[t]{0.24\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{dht11.jpg}
+    \captionof{figure}{DHT11 Sensor}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.24\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{aht11.jpg}
+    \captionof{figure}{AHT11 Sensor}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{0.24\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{soil_moisture.jpg}
+    \captionof{figure}{Capacitive Soil Moisture Sensor}
+\end{minipage}
+
+\vspace{0.5cm}
+\textbf{Sensor Descriptions:}
+\begin{itemize}[leftmargin=*]
+    \item \textbf{AHT-11:} Digital sensor for accurate temperature and humidity, I\textsuperscript{2}C interface, stable and reliable for smart agriculture.
+    \item \textbf{DHT-11:} Basic, low-cost sensor for temperature and humidity, single-wire protocol, suitable for simple monitoring.
+    \item \textbf{Capacitive Soil Moisture:} Analog sensor, corrosion-resistant, measures soil water content for precise irrigation.
+\end{itemize}
+
+\subsection{Pin Mapping}
+\begin{tabular}{@{}llll@{}}
+\toprule
+\textbf{Sensor} & \textbf{Function} & \textbf{Pin} & \textbf{NodeMCU Pin} \\
+\midrule
+AHT-11 & SDA/SCL & D2/D1 & GPIO4/5 \\
+DHT-11 & Data & D5 & GPIO14 \\
+Soil Moisture & Analog Out & A0 & ADC0 \\
+\bottomrule
+\end{tabular}
+
+\subsection{Software}
+\begin{tabular}{@{}ll@{}}
+\toprule
+\textbf{Component} & \textbf{Technology} \\
+\midrule
+Backend & Node.js, TypeScript \\
+Frontend & TypeScript, HTML, CSS \\
+Data Storage & Google Sheets API \\
+Microcontroller Code & Arduino (C++) \\
+\bottomrule
+\end{tabular}
+
+\subsection{Development Tools}
+\begin{itemize}[leftmargin=*]
+    \item TypeScript for type-safe development
+    \item Webpack for module bundling
+    \item Git for version control
+    \item VS Code recommended for development
+\end{itemize}
+
+\section{Implementation Details}
+
+\subsection{Project Structure}
+\begin{lstlisting}[language=bash]
+plant-monitoring-system
+├── src
+│   ├── server
+│   ├── client
+│   └── types
+├── config
+├── dist
+├── package.json
+\end{lstlisting}
+
+\subsection{Key Features}
+\begin{tabular}{@{}ll@{}}
+\toprule
+\textbf{Feature} & \textbf{Description} \\
+\midrule
+Real-time Monitoring & Live sensor data on dashboard \\
+Alerts & Custom thresholds, notifications \\
+Data Visualization & Charts for trends (temp, humidity, soil) \\
+Google Sheets Sync & Persistent cloud storage \\
+Multi-plant Support & Monitor several plants \\
+Responsive UI & Works on desktop/mobile \\
+\bottomrule
+\end{tabular}
+
+\section{API Documentation}
+
+\subsection{Endpoints}
+
+\subsubsection{GET /api/plants}
+\begin{itemize}[leftmargin=*]
+    \item Returns list of all monitored plants
+    \item Response: Array of plant objects with sensor data
+\end{itemize}
+
+\subsubsection{GET /api/plants/:id}
+\begin{itemize}[leftmargin=*]
+    \item Returns specific plant data
+    \item Parameters: plant ID
+    \item Response: Plant object with current sensor readings
+\end{itemize}
+
+\subsubsection{POST /api/plants/:id/alerts}
+\begin{itemize}[leftmargin=*]
+    \item Sets alert thresholds for a plant
+    \item Parameters: plant ID, threshold values
+    \item Response: Updated alert configuration
+\end{itemize}
+
+\subsection{Data Models}
+
+\subsubsection{Plant Object}
+\begin{lstlisting}[language=typescript]
+interface Plant {
+    id: string;
+    name: string;
+    temperature: number;
+    humidity: number;
+    soilMoisture: number;
+    lastUpdated: Date;
+}
+\end{lstlisting}
+
+\section{Setup and Configuration Guide}
+
+\subsection{Prerequisites}
+\begin{enumerate}[leftmargin=*]
+    \item Node.js installation
+    \item npm package manager
+    \item Google Sheets API credentials
+    \item Git
+\end{enumerate}
+
+\subsection{ESP8266 Hardware Setup}
+
+The NodeMCU ESP8266 development board operates at 3.3V logic, and care must be taken to ensure that no sensor outputs exceed this voltage. All sensors used in this project—the AHT-11, DHT-11, and capacitive soil moisture sensor—can safely operate at 3.3V, making them directly compatible with the NodeMCU's power pins and input thresholds.
+
+\vspace{0.5cm}
+\begin{center}
+    \includegraphics[width=0.35\textwidth]{esp8266.jpg}
+    \captionof{figure}{NodeMCU ESP8266 Development Board}
+\end{center}
+
+\begin{itemize}
+    \item \textbf{AHT-11 Sensor (I\textsuperscript{2}C):}  
+    The AHT-11 sensor communicates via the I\textsuperscript{2}C protocol. It requires four connections: VCC to the 3.3V output on NodeMCU, GND to ground, SDA to D2 (GPIO4), and SCL to D1 (GPIO5). This sensor transmits temperature and humidity data digitally to the ESP8266 and is initialized in the Arduino code using the Adafruit AHTX0 library. The I\textsuperscript{2}C protocol supports multiple devices over the same two data lines.
+
+    \item \textbf{DHT-11 Sensor (Single-Wire Digital):}  
+    The DHT-11 uses a single digital pin to transmit both temperature and humidity data. It is connected with VCC to 3.3V, GND to ground, and the data line to D5 (GPIO14) on the NodeMCU. The communication is handled using the DHT library in the Arduino environment, and the sensor is directly read using `dht.readTemperature()` and `dht.readHumidity()`.
+
+    \item \textbf{Capacitive Soil Moisture Sensor (Analog):}  
+    This sensor outputs an analog voltage that varies with soil moisture content. The sensor's VCC is connected to 3.3V, GND to ground, and the analog output (AOUT) to A0 on the NodeMCU. The ESP8266's built-in ADC reads this voltage through `analogRead(A0)`. A higher output voltage typically indicates wetter soil.
+\end{itemize}
+
+\vspace{0.5cm}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{|l|l|l|l|}
+\hline
+\textbf{Sensor} & \textbf{Function} & \textbf{Sensor Pin} & \textbf{NodeMCU Pin (Label, GPIO)} \\
+\hline
+AHT-11        & Power       & VCC        & 3V3 (3.3V) \\
+              & Ground      & GND        & GND \\
+              & I\textsuperscript{2}C SDA & SDA        & D2 (GPIO4) \\
+              & I\textsuperscript{2}C SCL & SCL        & D1 (GPIO5) \\
+\hline
+DHT-11        & Power       & VCC        & 3V3 (3.3V) \\
+              & Ground      & GND        & GND \\
+              & Data        & DATA       & D5 (GPIO14) \\
+\hline
+Soil Sensor   & Power       & VCC        & 3V3 (3.3V) \\
+              & Ground      & GND        & GND \\
+              & Analog Out  & AOUT       & A0 (ADC0) \\
+\hline
+\end{tabular}
+\caption{Wiring connections between sensors and NodeMCU ESP8266.}
+\label{tab:sensor-connections}
+\end{table}
+
+\vspace{0.5cm}
+
+%IMAGE HERE
+%\noindent\textit{Note: Place the wiring diagram image file as \texttt{esp8266\_wiring\_diagram.png} in the same directory as your LaTeX project.}
+
+
+\subsection{Installation Steps}
+\begin{enumerate}[leftmargin=*]
+    \item Clone repository:
+    \begin{lstlisting}[language=bash]
+    git clone <repository-url>
+    cd plant-monitoring-system
+    \end{lstlisting}
+    
+    \item Install dependencies:
+    \begin{lstlisting}[language=bash]
+    npm install
+    \end{lstlisting}
+    
+    \item Configure Google Sheets:
+    \begin{itemize}
+        \item Set up API credentials
+        \item Update configuration in \texttt{config/sheets.ts}
+    \end{itemize}
+    
+    \item Start the server:
+    \begin{lstlisting}[language=bash]
+    npm start
+    \end{lstlisting}
+    
+    \item Access the application at \url{http://localhost:3000}
+\end{enumerate}
+
+
+
+%\noindent\textit{Note: Place the wiring diagram image file as \texttt{esp8266\_wiring\_diagram.png} in the same directory as your LaTeX project.}
+
+
+\section{User Manual}
+
+\subsection{Dashboard Overview}
+\begin{itemize}[leftmargin=*]
+    \item Select plant, view latest sensor readings
+    \item Visualize trends with interactive charts
+    \item Set and receive alerts for critical conditions
+\end{itemize}
+
+% Insert images of the dashboard and charts
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.9\textwidth]{PMS1.png}
+    \caption{Main dashboard: real-time sensor data and plant selection}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.9\textwidth]{PMS2.png}
+    \caption{Temperature trend visualization}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.9\textwidth]{PMS3.png}
+    \caption{Soil moisture and VPD trend visualization}
+\end{figure}
+
+\subsection{Key Features}
+\begin{enumerate}[leftmargin=*]
+    \item \textbf{Plant Monitoring}
+    \begin{itemize}
+        \item View current environmental conditions
+        \item Track historical data trends
+        \item Monitor multiple plants simultaneously
+    \end{itemize}
+    
+    \item \textbf{Alert Management}
+    \begin{itemize}
+        \item Set custom thresholds for each plant
+        \item Receive notifications for critical conditions
+        \item View alert history
+    \end{itemize}
+    
+    \item \textbf{Data Analysis}
+    \begin{itemize}
+        \item View derived metrics (VPD, Dew Point, Heat Index)
+        \item Export data to Google Sheets
+        \item Generate reports
+    \end{itemize}
+\end{enumerate}
+
+\section{Testing Procedures}
+
+To ensure accuracy, reliability, and robustness of the Plant Monitoring System, we conducted three levels of testing: unit testing, integration testing, and full system testing.
+
+\subsection{Unit Testing}
+\begin{itemize}[leftmargin=*]
+    \item Verified soil sensor readings by comparing dry/wet values; ensured correct ADC conversion and data format.
+    \item Checked DHT11 output for temperature/humidity using known sources; validated sensor accuracy and stability.
+    \item Confirmed JSON structure for WebSocket/API; ensured consistent data sent to frontend.
+\end{itemize}
+
+\subsection{Integration Testing}
+\begin{itemize}[leftmargin=*]
+    \item Tested end-to-end sensor-to-dashboard data flow; verified real-time updates and correct data mapping.
+    \item Assessed Wi-Fi and API communication; ensured sensor data appears on dashboard after each update.
+    \item Checked Google Sheets integration; confirmed correct data storage and retrieval.
+\end{itemize}
+
+\subsection{System Testing}
+\begin{itemize}[leftmargin=*]
+    \item Observed dashboard performance over hours; ensured smooth updates and no browser lag.
+    \item Tested alert logic by varying sensor values; verified notifications trigger at correct thresholds.
+    \item Ran long-duration tests; confirmed stable Wi-Fi and data transmission for 48+ hours.
+\end{itemize}
+
+\section{Future Enhancements}
+
+\subsection{Planned Features}
+\begin{enumerate}[leftmargin=*]
+    \item Mobile application development
+    \item Machine learning for predictive analysis
+    \item Automated plant care recommendations
+    \item Enhanced data visualization
+    \item Multi-language support
+    \item Advanced alert system with SMS/Email notifications
+\end{enumerate}
+
+\subsection{Scalability Improvements}
+\begin{itemize}[leftmargin=*]
+    \item Support for more sensor types
+    \item Enhanced data storage solutions
+    \item Improved real-time processing
+    \item Better error handling and recovery
+\end{itemize}
+
+\section{Conclusion}
+
+The Plant Monitoring System offers a reliable and scalable solution for automated plant care using real-time environmental monitoring. Its accessible hardware, real-time feedback, and cloud integration make it suitable for a range of applications—from home gardening to agricultural research. The system is ready for future enhancements such as predictive analytics and automated irrigation.
+
+\newpage
+\section*{References and Documentation Links}
+
+\subsection*{Project Repository}
+\begin{itemize}[leftmargin=*,nosep]
+    \item \href{https://github.com/Vedant4205/Plant-Monitoring-System}{GitHub: Plant Monitoring System (Vedant4205)}
+\end{itemize}
+
+\subsection*{Official Documentation Links}
+\begin{itemize}[leftmargin=*,nosep]
+    \item \textbf{Node.js:} \href{https://nodejs.org/api/all.html}{Official Docs} | \href{https://nodejs.org/en/learn/getting-started/introduction-to-nodejs}{Getting Started} | \href{https://www.w3schools.com/nodejs/}{W3Schools Tutorial}
+    \item \textbf{TypeScript:} \href{https://www.typescriptlang.org}{Official Docs}
+    \item \textbf{Google Sheets API:} \href{https://developers.google.com/sheets/api}{API Docs}
+    \item \textbf{Arduino (C++):} \href{https://www.arduino.cc/reference/en/}{Reference}
+    \item \textbf{ESP8266 NodeMCU:} \href{https://www.espressif.com/sites/default/files/documentation/esp8266-technical_reference_en.pdf}{Technical Reference (PDF)}
+    \item \textbf{AHT-11 Sensor:} \href{https://www.adafruit.com/product/4566}{Datasheet} | \href{https://github.com/adafruit/Adafruit_AHTX0}{Arduino Library}
+    \item \textbf{DHT-11 Sensor:} \href{https://components101.com/sensors/dht11-temperature-sensor}{Datasheet \& Details}
+    \item \textbf{Soil Moisture Sensor:} \href{https://media.digikey.com/pdf/data%20sheets/dfrobot%20pdfs/sen0193_web.pdf}{DFRobot Datasheet (PDF)}
+    \item \textbf{Git:} \href{https://git-scm.com/doc}{Documentation}
+    \item \textbf{VS Code:} \href{https://code.visualstudio.com/docs}{Documentation}
+\end{itemize}
+
+\subsection*{Reference Papers and Related Work}
+\begin{itemize}[leftmargin=*,nosep]
+    \item \href{https://www.sciencedirect.com/science/article/pii/S2666154323003873}{ScienceDirect: Plant Monitoring with IoT and Sensors}
+    \item \href{https://www.ijert.org/research/agricultural-crop-monitoring-sensors-using-iot-a-study-IJERTCONV6IS13115.pdf}{Agricultural Crop Monitoring Sensors Using IoT: A Study (IJERT)}
+    \item \href{https://www.pnrjournal.com/index.php/home/article/download/1809/1552/2187}{Smart Plant Monitoring System for Plant Fitness Using IoT (PDF)}
+    \item \href{https://www.ijraset.com/research-paper/review-on-iot-based-smart-plant-monitoring-system}{Review on IoT-Based Smart Plant Monitoring System (IJRASET)}
+    \item \href{https://www.ijcrt.org/papers/IJCRT2410477.pdf}{A Review On IoT Smart Plant Care And Plant Monitoring System (PDF)}
+    \item \href{https://ijrpr.com/uploads/V6ISSUE3/IJRPR39608.pdf}{Plant Monitoring System - IJRPR (PDF)}
+\end{itemize}
+
+\subsection*{Summary Table: Sensors and Key Components}
+\begin{itemize}[leftmargin=*,nosep]
+    \item \textbf{AHT-11:} \href{https://github.com/adafruit/Adafruit_AHTX0}{Adafruit AHTX0 Arduino Library}
+    \item \textbf{DHT-11:} \href{https://components101.com/sensors/dht11-temperature-sensor}{DHT11 Sensor Details}
+    \item \textbf{Soil Moisture Sensor:} \href{https://media.digikey.com/pdf/data%20sheets/dfrobot%20pdfs/sen0193_web.pdf}{DFRobot Capacitive Soil Moisture Sensor Datasheet}
+    \item \textbf{ESP8266 NodeMCU:} \href{https://www.espressif.com/sites/default/files/documentation/esp8266-technical_reference_en.pdf}{ESP8266 Technical Reference}
+\end{itemize}
+
+\end{document}

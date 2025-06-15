@@ -1,0 +1,56 @@
+<body>
+    <header>
+        <div class="header-center">
+            <h1>Plant Monitoring System</h1>
+            <div class="plant-select-row">
+                <label for="plant-select"><b>Select Plant:</b></label>
+                <select id="plant-select">
+                    <option value="plant1">Plant 1</option>
+                    <option value="plant2">Plant 2</option>
+                    <option value="plant3">Plant 3</option>
+                    <option value="plant4">Plant 4</option>
+                </select>
+            </div>
+        </div>
+    </header>
+    <div id="alert-area"></div>
+    <div id="app">
+        <div id="sensor-data">
+            <h2>Sensor Data</h2>
+            <div id="loading-message">Loading data...</div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Timestamp</th>
+                        <th>AHT Temperature (°C)</th>
+                        <th>AHT Humidity (%)</th>
+                        <th>DHT Temperature (°C)</th>
+                        <th>DHT Humidity (%)</th>
+                        <th>Soil Moisture (%)</th>
+                        <th title="Vapor Pressure Deficit (kPa)">VPD (kPa)</th>
+                        <th title="Dew Point (°C)">Dew Point (°C)</th>
+                        <th title="Heat Index (°C)">Heat Index (°C)</th>
+                    </tr>
+                </thead>
+                <tbody id="data-list"></tbody>
+            </table>
+
+            <h2>Average Temperature vs Time</h2>
+            <canvas id="tempChart" width="400" height="200"></canvas>
+
+            <h2>Average Humidity vs Time</h2>
+            <canvas id="humiChart" width="400" height="200"></canvas>
+
+            <h2>Soil Moisture vs Time</h2>
+            <canvas id="soilChart" width="400" height="200"></canvas>
+
+            <h2>Vapor Pressure Deficit (VPD) vs Time</h2>
+            <canvas id="vpdChart" width="400" height="200"></canvas>
+        </div>
+    </div>
+    <footer class="footer">
+        <p>&copy; 2024 Plant Monitoring System</p>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="text/javascript" src="/bundle.js"></script>
+</body>
